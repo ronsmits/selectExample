@@ -18,27 +18,25 @@ class MainView : View("Hello TornadoFX Application") {
 class EntryView : View(){
     val controller : MainController by inject()
     override val root = tableview<Entry> {
-        column("title", Entry::title)
-        column("synopsis", Entry::synopsis)
-    }
-    init {
-        controller.categoryModel.setOnRebind {
-            root.items = controller.entries[controller.categoryModel.category.index].observable()
+        column("title", Entry::title).weigthedWidth(1.0)
+        column("synopsis", Entry::synopsis).weigthedWidth(4.0)
+        columnResizePolicy = SmartResize.POLICY
+        controller.categoryModel.itemProperty.onChange {
+            items.setAll(controller.entries[it!!.index])
         }
     }
+
+
 }
 
 class CategoryListView : View() {
     val controller: MainController by inject()
     override val root = listview<Category> {
+        prefWidth= 100.0
         items = controller.categories.observable()
 
-        cellFormat { text = "${it.title}" }
-
-        onUserSelect(clickCount = 1) {
-            controller.categoryModel.rebind { category = it }
-            //entryView.selectCategory(it)
-        }
+        cellFormat { text = it.title }
+        bindSelected(controller.categoryModel)
     }
 
 }

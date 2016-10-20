@@ -7,7 +7,7 @@ import tornadofx.Controller
 
 class MainController : Controller() {
 
-    val categoryModel = CategoryModel(Category("", 0))
+    val categoryModel = CategoryModel()
 
     val categories = listOf(
             Category("a", 0),
